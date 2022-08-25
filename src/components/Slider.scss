@@ -1,0 +1,33 @@
+.container-explore {
+	transform: translate(-100px, 0);
+	transition: all 0.2s linear;
+	z-index: 0;
+}
+.container-left:hover {
+	.container-explore {
+		transform: translate(0, 0);
+	}
+}
+.arrow-left {
+	display: none;
+}
+
+.arrow-left,
+.arrow-right {
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+.list-movie {
+	transition: all 0.5s ease;
+}
+.movie-member {
+	flex-basis: 1;
+}
+@media only screen and (min-width: 768px) {
+	.movie-member:hover {
+		z-index: 10;
+		top: -200%;
+		border: 1px solid transparent;
+		box-shadow: 1px 1px 3px 3px white;
+	}
+}
