@@ -1,141 +1,131 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import "./Slider.scss";
+import { UserAuth } from "../AuthContext";
+import { useEffect } from "react";
+import Movie from "./Movie";
+import { db } from "../firebase";
+import { doc, onSnapshot } from "firebase/firestore";
+import { Link } from "react-router-dom";
 
-const Slider = ({ data, title }) => {
-	const refArrowLeft = useRef(null);
-	const refContainer = useRef(null);
-	const refArrowRight = useRef(null);
-	const numberPage = useRef(1);
+const Slider = ({ data, title, paramURL, type }) => {
+	const refGrid = useRef(null);
+	const page = useRef(1);
 
-	const handleArrowLeft = () => {
-		numberPage.current--;
-		if (numberPage.current < 4) {
-			refArrowRight.current.style.display = "flex";
-		}
-		let length = "translate(-" + 26.35 * (numberPage.current - 1) + "%, 0)";
-		refContainer.current.style.transform = length;
-		if (numberPage.current <= 1) {
-			refArrowLeft.current.style.display = "none";
+	const [shows, setShows] = useState([]);
+
+	const { windowSize, user } = UserAuth();
+	const [pageMax, setPageMax] = useState(1);
+
+	const height = 25;
+
+	useEffect(() => {
+		if (windowSize.innerWidth >= 1024) {
+			setPageMax(4);
 			return;
 		}
+		if (windowSize.innerWidth >= 768) {
+			setPageMax(5);
+			return;
+		}
+		if (windowSize.innerWidth >= 640) {
+			setPageMax(7);
+			return;
+		}
+		setPageMax(10);
+	}, [windowSize.innerWidth]);
+
+	const handleArrowLeft = () => {
+		refGrid.current.style.transform = "translate(0,-" + height * (page.current - 2) + "vh)";
+		page.current--;
+		if (page.current <= 1) page.current = 1;
 	};
 
 	const handleArrowRight = () => {
-		numberPage.current++;
-		if (numberPage.current > 1) {
-			refArrowLeft.current.style.display = "flex";
-		}
-		let length = "translate(-" + 26.35 * (numberPage.current - 1) + "%, 0)";
-		refContainer.current.style.transform = length;
-		if (numberPage.current >= 4) {
-			refArrowRight.current.style.display = "none";
-			return;
-		}
+		page.current++;
+		if (page.current >= pageMax) page.current = pageMax;
+		refGrid.current.style.transform = "translate(0,-" + height * (page.current - 1) + "vh)";
 	};
 
+	useEffect(() => {
+		onSnapshot(doc(db, "users", `${user?.email}`), (doc) => {
+			setShows(doc.data()?.shows);
+		});
+	}, [user?.email]);
+
 	return (
-		<div>
-			<div className="w-full h-[30px] bg-[#141414] relative z-[10]"></div>
-			<div className="container-slider w-full h-[180px] bg-[#141414] flex flex-col relative z-[10]">
-				<div className="w-full h-[25%] flex px-[3%] relative z-[10]">
-					<a className="container-left flex cursor-pointer" href="">
-						<h1 className="text-white font-bold text-[24px] my-auto bg-[#141414] z-10">{title}</h1>
-						<div className="container-explore flex pl-[10px]">
-							<p className="text-blue-500 my-auto">Explore All</p>
+		<div className="overflow-hidden">
+			<div className="w-fit">
+				<Link to={"/home/" + paramURL}>
+					<div className="flex">
+						<h1 className="text-white font-bold text-2xl md:text-4xl px-8 py-4 cursor-pointer w-fit pr-2">{title}</h1>
+						<div className="flex text-blue-400 text-lg md:text-xl">
+							<h1 className="my-auto cursor-pointer w-fit">Explore All</h1>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
 								viewBox="0 0 24 24"
 								strokeWidth={1.5}
 								stroke="currentColor"
-								className="w-4 h-4 text-blue-500 my-auto"
+								className="w-4 h-4 my-auto mx-1"
 							>
-								<path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+								<path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
 							</svg>
 						</div>
-					</a>
-				</div>
-				{/* Scroll Movie */}
-				<div className="container-scroll w-full h-full flex relative z-[100] mt-[5px]">
-					<div ref={refArrowLeft} onClick={handleArrowLeft} className="arrow-left h-full w-[3%] absolute z-10 my-auto">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							strokeWidth={1.5}
-							stroke="currentColor"
-							className="w-8 h-8 text-white my-auto mx-auto"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5"
-							/>
-						</svg>
 					</div>
-
-					<div className="h-full w-full">
-						<div
-							ref={refContainer}
-							className={"list-movie flex h-full w-[900vw] lg:w-[360vw] md:w-[440vw] sm:w-[600vw] absolute left-[3%]"}
-						>
-							{data.map((movie, index) => (
-								<div
-									key={index}
-									className="container-movie-member relative w-[45vw] h-full lg:w-[18vw] md:w-[22vw] sm:w-[30vw]"
-								>
-									<div className="movie-member cursor-pointer flex flex-col bg-black absolute w-[44.1vw] h-[300%] lg:w-[17.7vw] md:w-[21.5vw] sm:w-[29.3vw]  md:hover:lg:w-[20vw] md:hover:md:w-[24vw]">
-										<img
-											className="w-full h-[33.34%]"
-											src={"https://image.tmdb.org/t/p/original" + movie.backdrop_path}
-											alt=""
-										/>
-										<div className="w-full h-[15%] flex">
-											<h1 className=" text-white text-center font-bold text-[20px] my-auto h-[fit-content] mx-auto">
-												{movie.title}
-											</h1>
-										</div>
-										<h1 className="w-full h-[46.66%] text-[grey] overflow-hidden">{movie.overview}</h1>
-										<div className="w-full h-[5%] flex">
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												fill="none"
-												viewBox="0 0 24 24"
-												strokeWidth={1.5}
-												stroke="currentColor"
-												className="w-6 h-6 mx-auto my-auto text-white"
-											>
-												<path
-													strokeLinecap="round"
-													strokeLinejoin="round"
-													d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-												/>
-											</svg>
-										</div>
-									</div>
-								</div>
-							))}
-						</div>
-					</div>
-
-					<div
-						ref={refArrowRight}
-						onClick={handleArrowRight}
-						className="arrow-right w-[3%]  h-full right-0 absolute flex"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							strokeWidth={1.5}
-							stroke="currentColor"
-							className="w-8 h-8 text-white my-auto mx-auto"
-						>
-							<path strokeLinecap="round" strokeLinejoin="round" d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5" />
-						</svg>
-					</div>
-				</div>
+				</Link>
 			</div>
+
+			{/* Slider */}
+			<div className={"h-[" + height + "vh] w-screen"}>
+				{/* arrow-left */}
+				<div
+					onClick={handleArrowLeft}
+					className={
+						"arrow-left w-8 h-[" + height + "vh] flex w-full absolute left-0 bg-transparent cursor-pointer z-10"
+					}
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						strokeWidth={1.5}
+						stroke="currentColor"
+						className="w-6 h-6 text-white m-auto"
+					>
+						<path strokeLinecap="round" strokeLinejoin="round" d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
+					</svg>
+				</div>
+				{/* arrow-left */}
+
+				<div className={"h-[" + height + "vh] w-full px-8 absolute overflow-hidden"}>
+					<div ref={refGrid} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-x-4">
+						{data?.map((movie, id) => (
+							<Movie key={id} movie={movie} type={type} list={shows} />
+						))}
+					</div>
+				</div>
+
+				{/* arrow-right */}
+				<div
+					onClick={handleArrowRight}
+					className={
+						"arrow-left w-8 h-[" + height + "vh] w-full flex absolute right-0 bg-transparent cursor-pointer z-[10]"
+					}
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						strokeWidth={1.5}
+						stroke="currentColor"
+						className="w-6 h-6 text-white m-auto"
+					>
+						<path strokeLinecap="round" strokeLinejoin="round" d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5" />
+					</svg>
+				</div>
+				{/* arrow-right */}
+			</div>
+			{/* slider */}
 		</div>
 	);
 };

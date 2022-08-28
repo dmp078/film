@@ -1,0 +1,62 @@
+.container {
+	background-image: url("https://assets.nflxext.com/ffe/siteui/vlv3/ac824598-245b-4828-b14f-5cff9074f4d0/2dc90a8e-4441-4703-8b73-1ca831fb0733/VN-vi-20220822-popsignuptwoweeks-perspective_alpha_website_medium.jpg");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	@media only screen and (max-width: 640px) {
+		background-image: none;
+		background-color: black;
+	}
+}
+
+.overlay {
+	background-color: rgba(0, 0, 0, 0.3);
+}
+
+.container-form-signin {
+	background-color: rgba(0, 0, 0, 0.8);
+	padding: 60px 68px 40px;
+	@media only screen and (max-width: 640px) {
+		padding: 0;
+	}
+}
+
+.input-email {
+	outline: none;
+	color: rgba(255, 255, 255, 0.9);
+	background-color: transparent;
+}
+
+.placeholder-email {
+	font-size: 20px;
+	transition: all 0.3s linear;
+}
+
+.input-password {
+	outline: none;
+	color: rgba(255, 255, 255, 0.9);
+	background-color: transparent;
+}
+
+.placeholder-password {
+	font-size: 20px;
+	transition: all 0.3s linear;
+}
+
+.container-email.active {
+	.input-email {
+		display: block;
+	}
+	.placeholder-email {
+		font-size: 14px;
+	}
+}
+
+.container-password.active {
+	.input-password {
+		display: block;
+	}
+	.placeholder-password {
+		font-size: 14px;
+	}
+}

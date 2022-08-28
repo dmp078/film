@@ -1,12 +1,14 @@
 import React from "react";
+import Footer from "../components/Footer";
 import Main from "../components/Main";
 import Navbar from "../components/Navbar";
 
 const Home = () => {
 	return (
-		<div className="bg-[#141414] w-full h-full overflow-hidden">
+		<div>
 			<Navbar />
 			<Main />
+			<Footer />
 		</div>
 	);
 };

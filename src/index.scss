@@ -1,10 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap");
 
 body {
 	margin: 0;
 	border: 0;
+	background-color: #141414;
 	font-family: "Ubuntu", sans-serif;
+}
+html {
+	::-webkit-scrollbar {
+		width: 4px;
+		background-color: #141414;
+	}
+	::-webkit-scrollbar-thumb {
+		background: red;
+	}
+	height: fit-content;
 }
