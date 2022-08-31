@@ -18,7 +18,9 @@ const Main = () => {
 	const paramTVtopRated = "tv/top_rated";
 
 	useEffect(() => {
-		fetch("https://api.themoviedb.org/3/movie/popular?api_key=f0f9e74e5fd05626665a49734847bbbd&language=en-US&page=1")
+		fetch(
+			"https://api.themoviedb.org/3/movie/popular?api_key=f0f9e74e5fd05626665a49734847bbbd&language=en-US&page=1"
+		)
 			.then((res) => res.json())
 			.then((res) => {
 				setDataPopular(res?.results);
@@ -26,7 +28,9 @@ const Main = () => {
 	}, []);
 
 	useEffect(() => {
-		fetch("https://api.themoviedb.org/3/movie/upcoming?api_key=f0f9e74e5fd05626665a49734847bbbd&language=en-US&page=1")
+		fetch(
+			"https://api.themoviedb.org/3/movie/upcoming?api_key=f0f9e74e5fd05626665a49734847bbbd&language=en-US&page=1"
+		)
 			.then((res) => res.json())
 			.then((res) => {
 				setDataUpcoming(res?.results);
@@ -34,7 +38,9 @@ const Main = () => {
 	}, []);
 
 	useEffect(() => {
-		fetch("https://api.themoviedb.org/3/tv/on_the_air?api_key=f0f9e74e5fd05626665a49734847bbbd&language=en-US&page=1")
+		fetch(
+			"https://api.themoviedb.org/3/tv/on_the_air?api_key=f0f9e74e5fd05626665a49734847bbbd&language=en-US&page=1"
+		)
 			.then((res) => res.json())
 			.then((res) => {
 				setDataTVonTheAir(res?.results);
@@ -42,7 +48,9 @@ const Main = () => {
 	}, []);
 
 	useEffect(() => {
-		fetch("https://api.themoviedb.org/3/tv/airing_today?api_key=f0f9e74e5fd05626665a49734847bbbd&language=en-US&page=1")
+		fetch(
+			"https://api.themoviedb.org/3/tv/airing_today?api_key=f0f9e74e5fd05626665a49734847bbbd&language=en-US&page=1"
+		)
 			.then((res) => res.json())
 			.then((res) => {
 				setDataTVairingToday(res?.results);
@@ -50,7 +58,9 @@ const Main = () => {
 	}, []);
 
 	useEffect(() => {
-		fetch("https://api.themoviedb.org/3/tv/top_rated?api_key=f0f9e74e5fd05626665a49734847bbbd&language=en-US&page=1")
+		fetch(
+			"https://api.themoviedb.org/3/tv/top_rated?api_key=f0f9e74e5fd05626665a49734847bbbd&language=en-US&page=1"
+		)
 			.then((res) => res.json())
 			.then((res) => {
 				setDataTVtopRated(res?.results);
@@ -58,15 +68,25 @@ const Main = () => {
 	}, []);
 
 	return (
-		<div className="">
+		<>
 			<HeaderVideo data={dataUpcoming} type={"movie"} />
 			<div className="w-full h-[75px] md:hidden"></div>
 			<Slider data={dataPopular} title={"Popular"} paramURL={paramPopular} type={"movie"} />
 			<Slider data={dataUpcoming} title={"Up Coming"} paramURL={paramUpcoming} type={"movie"} />
-			<Slider data={dataTVonTheAir} title={"TV On The Air"} paramURL={paramTVonTheAir} type={"tv"} />
-			<Slider data={dataTVairingToday} title={"TV Airing Today"} paramURL={paramTVairingToday} type={"tv"} />
+			<Slider
+				data={dataTVonTheAir}
+				title={"TV On The Air"}
+				paramURL={paramTVonTheAir}
+				type={"tv"}
+			/>
+			<Slider
+				data={dataTVairingToday}
+				title={"TV Airing Today"}
+				paramURL={paramTVairingToday}
+				type={"tv"}
+			/>
 			<Slider data={dataTVtopRated} title={"TV Top Rated"} paramURL={paramTVtopRated} type={"tv"} />
-		</div>
+		</>
 	);
 };
 

@@ -1,9 +1,9 @@
 import React from "react";
 import { useRef } from "react";
-import "./Navbar.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../AuthContext";
 import { useState } from "react";
+import "./components.scss";
 
 const Navbar = () => {
 	const refViewMenu = useRef(null);
@@ -64,15 +64,27 @@ const Navbar = () => {
 					ref={refMenuOverlay}
 					className="view-menu-mobile bg-[#141414] absolute w-screen h-screen left-0 -z-10 flex flex-col"
 				>
-					<Link to="/mylist" href="" className="h-[6vh] w-[60vw] rounded-md mx-auto mt-[80px] mb-[20px] flex">
+					<Link
+						to="/mylist"
+						href=""
+						className="h-[6vh] w-[60vw] rounded-md mx-auto mt-[80px] mb-[20px] flex"
+					>
 						<p className="text-white text-[3vh] my-auto mx-auto">My List</p>
 					</Link>
 
-					<Link to="/account" href="" className="h-[6vh] w-[60vw] bg-red-600  rounded-md mx-auto mb-[20px] flex">
+					<Link
+						to="/account"
+						href=""
+						className="h-[6vh] w-[60vw] bg-red-600  rounded-md mx-auto mb-[20px] flex"
+					>
 						<p className="text-white text-[3vh] my-auto mx-auto">Account</p>
 					</Link>
 
-					<Link to="/" onClick={logOut} className="h-[6vh] w-[60vw] bg-white text-[3vh] rounded-md mx-auto flex">
+					<Link
+						to="/"
+						onClick={logOut}
+						className="h-[6vh] w-[60vw] bg-white text-[3vh] rounded-md mx-auto flex"
+					>
 						<p className="text-[3vh] my-auto mx-auto">Log out</p>
 					</Link>
 				</div>
@@ -93,7 +105,7 @@ const Navbar = () => {
 			</div>
 
 			{/* Search */}
-			<form onSubmit={handleSearch} className="container-search w-[30%] lg:w-[25%] h-full flex">
+			<form onSubmit={handleSearch} className="container-search w-[35%] lg:w-[25%] h-full flex">
 				<svg
 					onClick={handleSearch}
 					xmlns="http://www.w3.org/2000/svg"

@@ -3,10 +3,11 @@ import { db } from "../firebase";
 import { updateDoc, doc } from "firebase/firestore";
 import { UserAuth } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 
 const MovieShowList = ({ list, movie }) => {
 	const { user } = UserAuth();
-
+	const refOverlay = useRef(null);
 	const handleSubcribe = async () => {
 		if (`${user?.email}`) {
 			let res = [];
@@ -27,68 +28,33 @@ const MovieShowList = ({ list, movie }) => {
 	};
 
 	return (
-		<div className="grid-member relative">
-			<div>
-				<img
-					className="h-[25vh] w-full relative"
-					src={`https://image.tmdb.org/t/p/original/${movie?.img}`}
-					alt={movie?.title}
+		<div
+			onMouseEnter={() => {
+				refOverlay.current.style.display = "block";
+			}}
+			onMouseLeave={() => {
+				refOverlay.current.style.display = "none";
+			}}
+			className="w-full h-[22.5vh] relative"
+		>
+			<img
+				className="w-full h-[22.5vh] object-cover object-center rounded-xl"
+				src={`https://image.tmdb.org/t/p/original/${movie?.img}`}
+				alt={movie?.title}
+			/>
+			<div
+				ref={refOverlay}
+				style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
+				className="overlay-movie absolute inset-0 text-white hidden"
+			>
+				<i
+					onClick={handleSubcribe}
+					className={`fa-solid fa-heart absolute top-0 text-[30px] mt-2 ml-2 cursor-pointer`}
 				/>
-				<div className="overlay w-full h-full absolute top-0 hidden bg-black cursor-pointer">
-					<div
-						onClick={handlePlay}
-						className="text-white absolute top-0 right-0 bottom-0 left-0 m-auto h-[60px] w-[60px]"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							strokeWidth={1.5}
-							stroke="currentColor"
-							className="w-8 h-8 absolute top-0 right-0 bottom-0 left-0 m-auto"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"
-							/>
-						</svg>
-					</div>
-					<div>
-						<div className="absolute m-2 text-white">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								strokeWidth={1.5}
-								stroke="currentColor"
-								className="w-6 h-6 cursor-pointer"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-								/>
-							</svg>
-						</div>
-						<div onClick={handleSubcribe} className="absolute m-2 text-white right-0">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								strokeWidth={1.5}
-								stroke="currentColor"
-								className="w-6 h-6"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-								/>
-							</svg>
-						</div>
-					</div>
-				</div>
+				<i
+					onClick={handlePlay}
+					className={`fa-solid fa-circle-play absolute cursor-pointer inset-0 m-auto text-[30px] w-8 h-8`}
+				/>
 			</div>
 		</div>
 	);
